@@ -1,5 +1,4 @@
 import email
-from unicodedata import name
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -10,7 +9,8 @@ class User(AbstractUser):
     email = models.CharField(max_length=25,unique=True)
     password = models.CharField(max_length=255)
     loggedIn = models.BooleanField(default=False)
-    # USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    username = models.CharField('username', max_length=150, unique=True)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
     
-  
+    
