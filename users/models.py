@@ -11,6 +11,6 @@ class User(AbstractUser):
     loggedIn = models.BooleanField(default=False)
     username = None
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS =[]
+    REQUIRED_FIELDS =['email','password','username']
     
     
