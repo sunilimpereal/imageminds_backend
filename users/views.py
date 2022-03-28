@@ -48,8 +48,11 @@ class LoginView(APIView):
         response = Response()
         response.set_cookie(key='jwt',value=token)
         response.data = {
+            'id': user.id,
+            'email': user.email,
+            'name':user.name,
             'jwt':token,
-            'loggedIn': user.loggedIn 
+            'loggedIn': user.loggedIn,
         }
         return response
     
