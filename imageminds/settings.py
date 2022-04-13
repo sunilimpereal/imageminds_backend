@@ -129,3 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.User'
+
+
+# two factor login mobile otp
+OTP_API_KEY = "t7zGAOkNY5D"  

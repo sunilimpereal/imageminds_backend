@@ -7,8 +7,10 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=25,unique=True)
+    mobile = models.CharField(max_length=12,unique=True)
     password = models.CharField(max_length=255)
     loggedIn = models.BooleanField(default=False)
+    otp = models.IntegerField(default=9898)
     username = models.CharField('username', max_length=150, unique=True)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
