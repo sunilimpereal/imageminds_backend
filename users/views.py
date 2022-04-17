@@ -2,6 +2,7 @@ from cgitb import reset
 from datetime import datetime
 import optparse
 from urllib import response
+from grades.models import Grade
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
@@ -12,8 +13,8 @@ import datetime
 from .helpers import send_otp_to_phone
 
 
-from .serializers import UserSerializer
-from .models import User
+from .serializers import StudentSerializer, UserSerializer
+from .models import Student, User
 
 # Create your views here.
 
@@ -29,34 +30,35 @@ class LoginView(APIView):
         email = request.data['email']
         password = request.data['password']
         logedIn = False
-        user = User.objects.filter(email=email).first()
-        if user is None:
-            raise AuthenticationFailed('User not found')
-        if not user.check_password(password):
+        student = Student.objects.filter(email=email).first()
+        if student is None:
+            raise AuthenticationFailed('Student not found')
+        if not student.password == password:
             raise AuthenticationFailed('Incorrect Password')
-        if user.loggedIn is True:
+        if student.loggedIn is True:
             raise AuthenticationFailed('Already Logged In ')
         else:
            data = {"loggedIn": True}
-           serialist = UserSerializer(user,data=data,partial=True)
+           serialist = StudentSerializer(student,data=data,partial=True)
            if serialist.is_valid():
                serialist.save()
                
         payload = {
-            'id':user.id,
+            'id':student.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=600),
             'iat': datetime.datetime.utcnow()
         }
         token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
         response = Response()
         response.set_cookie(key='jwt',value=token)
-        response.data = {
-            'id': user.id,
-            'email': user.email,
-            'name':user.name,
-            'jwt':token,
-            'loggedIn': user.loggedIn,
-        }
+        response.data = StudentSerializer(student).data
+        # response.data = {
+        #     'id': student.id,
+        #     'email': student.email,
+        #     'name':student.username,
+        #     'jwt':token,
+        #     'loggedIn': student.loggedIn,
+        # }
         return response
     
 class LoginOTPVerifyView(APIView):
@@ -64,93 +66,83 @@ class LoginOTPVerifyView(APIView):
         mobile = request.data['mobile']
         otp = request.data['otp']
         logedIn = False
-        user = User.objects.filter(mobile=mobile).first()
-        if user is None:
-            raise AuthenticationFailed('User not found')
-        if not user.otp == otp:
+        student = Student.objects.filter(mobile=mobile).first()
+        if student is None:
+            raise AuthenticationFailed('Student not found')
+        if not student.otp == otp:
             raise AuthenticationFailed('Incorrect otp')
-        if user.loggedIn is True:
+        if student.loggedIn is True:
             raise AuthenticationFailed('Already Logged In ')
         else:
            data = {"loggedIn": True}
-           serialist = UserSerializer(user,data=data,partial=True)
+           serialist = StudentSerializer(student,data=data,partial=True)
            if serialist.is_valid():
                serialist.save()
                
         payload = {
-            'id':user.id,
+            'id':student.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=600),
             'iat': datetime.datetime.utcnow()
         }
         token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
         response = Response()
         response.set_cookie(key='jwt',value=token)
-        response.data = {
-            'id': user.id,
-            'email': user.email,
-            'name':user.name,
-            'jwt':token,
-            'loggedIn': user.loggedIn,
-        }
+        response.data = StudentSerializer(student).data
+
         return response   
     
 class LoginMobSendOTPView(APIView):
     def post(self,request):
         mobile = request.data['mobile']
         logedIn = False
-        user = User.objects.filter(mobile=mobile).first()
-        if user is None:
-            raise AuthenticationFailed('User not found')
-        if user.loggedIn is True:
+        student = Student.objects.filter(mobile=mobile).first()
+        if student is None:
+            raise AuthenticationFailed('Student not found')
+        if student.loggedIn is True:
             raise AuthenticationFailed('Already Logged In ')
         else:
-            otp = send_otp_to_phone(user.mobile,user.name)
+            otp = send_otp_to_phone(student.mobile,student.username)
             if otp is None:
                 raise AuthenticationFailed('Failed to send OTP')
             data = {"otp": otp}
-            serialist = UserSerializer(user,data=data,partial=True)
+            serialist = StudentSerializer(student,data=data,partial=True)
             if serialist.is_valid():
                serialist.save()
         
         response = Response()
-        response.data = {
-            'id': user.id,
-            'email': user.email,
-            'otp':otp,
-            'loggedIn': user.loggedIn,
-        }
+        response.data = StudentSerializer(student).data
         return response
-    
 
-class UserView(APIView):
-    def get(self,request):
-        token = request.COOKIES.GET('jwt')
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-        try:
-            payload = jwt.decode(token,'secret',algorithm=['HS26'])
-        except:
-            raise AuthenticationFailed('Expired')
-        user = User.objects.filter(id = payload['id']).first()
-        serializer= UserSerializer(user)
-        return Response(serializer.data)
     
 class LogoutView(APIView):
     def post(self,request):
         email = request.data['email']
-        user = User.objects.filter(email=email).first()
-        if user is None:
+        student = Student.objects.filter(email=email).first()
+        if student is None:
             raise AuthenticationFailed('User not found')
-        if user.loggedIn is True:
+        if student.loggedIn is True:
             data = {"loggedIn": False}
-            serialist = UserSerializer(user,data=data,partial=True)
+            serialist = UserSerializer(student,data=data,partial=True)
             if serialist.is_valid():
                serialist.save()
             response = Response()
             response.data = {
-            'email':user.email,
+            'email':student.email,
             'message': "Successfully Logged Out" 
             }
             return response
         else:
            raise AuthenticationFailed('Error Logging out')
+       
+## students
+class RegisterStudentView(APIView):
+    def post(self,request):
+        serializer = StudentSerializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.save()
+        return Response(serializer.data)
+    
+    def get(self,request):
+        students = Student.objects.all()
+        serializer= StudentSerializer(students,many =True)
+        return Response(serializer.data)
