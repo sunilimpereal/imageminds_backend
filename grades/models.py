@@ -11,4 +11,5 @@ class Grade(models.Model):
 
 class Video(models.Model):
     name = models.CharField(max_length=100)
+    fileName = models.CharField(max_length=255)
     grade = models.ForeignKey(to=Grade, on_delete=models.CASCADE)
