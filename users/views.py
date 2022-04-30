@@ -133,7 +133,10 @@ class LogoutView(APIView):
             return response
         else:
            raise AuthenticationFailed('Error Logging out')
-       
+
+
+
+
 ## students
 class RegisterStudentView(APIView):
     def post(self,request):
@@ -143,6 +146,7 @@ class RegisterStudentView(APIView):
         return Response(serializer.data)
     
     def get(self,request):
-        students = Student.objects.all()
+        uid = self.request.query_params.get('uid')
+        students = Student.objects.filter(userCode = uid)
         serializer= StudentSerializer(students,many =True)
         return Response(serializer.data)
