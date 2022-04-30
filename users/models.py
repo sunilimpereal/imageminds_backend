@@ -43,6 +43,7 @@ class Student(models.Model):
     area            = models.CharField(max_length=250)
     city            = models.CharField(max_length=250)
     state           = models.CharField(max_length=250)
+    zipcode         = models.CharField(max_length=8)
     country         = models.CharField(max_length=250)
     loggedIn        = models.BooleanField(default=False)
     otp             = models.IntegerField(default=9898)

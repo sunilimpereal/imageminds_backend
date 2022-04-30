@@ -47,6 +47,7 @@ class StudentSerializer(serializers.ModelSerializer):
                   'city',
                   'state',
                   'country',
+                  'zipcode',
                   'loggedIn',
                   'otp',
 
