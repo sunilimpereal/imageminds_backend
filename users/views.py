@@ -1,7 +1,10 @@
 from cgitb import reset
 from datetime import datetime
+from logging import raiseExceptions
 import optparse
 from urllib import response
+
+from uritemplate import partial
 from grades.models import Grade
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -150,3 +153,37 @@ class RegisterStudentView(APIView):
         students = Student.objects.filter(userCode = uid)
         serializer= StudentSerializer(students,many =True)
         return Response(serializer.data)
+    
+    def put(self,request):
+        uid                       = self.request.query_params.get('uid')
+        student_object            = Student.objects.get(userCode = uid)
+        data                      = request.data
+        # student_object.username   = data["username"]
+        # student_object.password   = data["password"]
+        # student_object.firstName  = data["firstName"]
+        # student_object.lastName   = data["lastName"  ]
+        # student_object.dob        = data["dob"       ]
+        # student_object.gender     = data["gender"    ]
+        # student_object.schoolName = data["schoolName"]
+        # student_object.grade.set(data["grade"     ])
+        # student_object.medium     = data["medium"    ]
+        # student_object.city       = data["city"      ]
+        # student_object.fatherName = data["fatherName"]
+        # student_object.motherName = data["motherName"]
+        # student_object.email      = data["email"     ]
+        # student_object.emailAlt   = data["emailAlt"  ]
+        # student_object.mobile     = data["mobile"    ]
+        # student_object.mobileAlt  = data["mobileAlt" ]
+        # student_object.zipcode    = data["zipcode"   ]
+        # student_object.address    = data["address"   ]
+        # student_object.area       = data["area"      ]
+        # student_object.state      = data["state"     ]
+        # student_object.country    = data["country"   ]
+        serializer= StudentSerializer(student_object,data = data,partial=True)
+        if serializer.is_valid(raise_exception = True):
+            serializer.save()
+       
+        return Response(serializer.data)
+    
+    
+ 

@@ -22,7 +22,7 @@ class User(AbstractUser):
 class Student(models.Model):
 
     # new data fields
-    userCode        = models.CharField(max_length=15)
+    userCode        = models.CharField(max_length=15,unique=True)
     username        = models.CharField('username', max_length=150, unique=True)
     password        = models.CharField(max_length=50)
     firstName       = models.CharField(max_length=150)
@@ -35,8 +35,8 @@ class Student(models.Model):
     city            = models.CharField(max_length=250)
     fatherName      = models.CharField(max_length=150)
     motherName      = models.CharField(max_length=150)
-    email           = models.CharField(max_length=25, unique=True)
-    emailAlt        = models.CharField(max_length=25)
+    email           = models.CharField(max_length=100, unique=True)
+    emailAlt        = models.CharField(max_length=100)
     mobile          = models.CharField(max_length=12, unique=True)
     mobileAlt       = models.CharField(max_length=12)
     address         = models.CharField(max_length=250)
@@ -49,3 +49,6 @@ class Student(models.Model):
     otp             = models.IntegerField(default=9898)
     USERNAME_FIELD  = 'username'
     REQUIRED_FIELDS = ['email']
+    
+    def __str__(self):
+        return self.userCode
