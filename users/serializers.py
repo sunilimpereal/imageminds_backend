@@ -49,12 +49,13 @@ class StudentSerializer(serializers.ModelSerializer):
                   'country',
                   'zipcode',
                   'loggedIn',
+                  'deviceId',
                   'otp',
 
                   ]
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
+        # extra_kwargs = {
+        #     'password': {'write_only': True}
+        # }
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)

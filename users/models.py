@@ -46,6 +46,7 @@ class Student(models.Model):
     zipcode         = models.CharField(max_length=8)
     country         = models.CharField(max_length=250)
     loggedIn        = models.BooleanField(default=False)
+    deviceId        = models.CharField(max_length=250,default=0)
     otp             = models.IntegerField(default=9898)
     USERNAME_FIELD  = 'username'
     REQUIRED_FIELDS = ['email']

@@ -36,6 +36,16 @@ class GradesView(APIView):
 
         return Response(grade_serializer.data)
     
+    def post(self,request,format = None):
+        """_summary_
+        post a list of all grades
+        """
+        serializer = GradeSerializer(data=request.data,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    
 class VediosView(APIView):
     """
     View to list all vedios in the grade.
@@ -60,3 +70,15 @@ class VediosView(APIView):
         video_serializer = VideoSerializer(video_list,many = True)
         
         return Response(video_serializer.data)
+    
+class VediosPostView(APIView):
+    def post(self, request, format=None):
+        """_summary_
+        post video
+        """
+        serializer = VideoSerializer(data=request.data,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+        

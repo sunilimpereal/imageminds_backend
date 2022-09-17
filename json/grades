@@ -1,0 +1,56 @@
+[{
+        "name": "Grade I | 4 - 6 (Yrs)",
+        "grade": "1",
+        "couseName": "Foundation in Visual Arts"
+    },
+    {
+        "name": "GRADE II | 5 - 7 (Yrs)",
+        "grade": "2",
+        "couseName": "Painting and Illustration - Paper to Pixel"
+    },
+    {
+        "name": "GRADE III | 6 - 8 (Yrs)",
+        "grade": "3",
+        "couseName": "Foundation in Graphic Designing"
+    },
+    {
+        "name": "GRADE IV | 7 - 9 (Yrs)",
+        "grade": "4",
+        "couseName": "Digital Photography"
+    },
+    {
+        "name": "GRADE V | 8 - 10 (Yrs)",
+        "grade": "5",
+        "couseName": "Digital Filmmaking"
+    },
+    {
+        "name": "GRADE VI | 9 - 11 (Yrs)",
+        "grade": "6",
+        "couseName": "Experimental Animation Techniques"
+    },
+    {
+        "name": "GRADE VII | 10 - 12 (Yrs)",
+        "grade": "7",
+        "couseName": "3D Modelling"
+    },
+    {
+        "name": "GRADE VIII | 11 - 13 (Yrs)",
+        "grade": "8",
+        "couseName": "Fashion Design"
+    },
+    {
+        "name": "GRADE VIII | 11 - 13 (Yrs)",
+        "grade": "9",
+        "couseName": "Mobile App Development"
+    },
+    {
+        "name": "GRADE IX | 12 - 14 (Yrs)",
+        "grade": "10",
+        "couseName": "AI Application Development"
+    },
+    {
+        "name": "GRADE X | 13 - 15 (Yrs)",
+        "grade": "11",
+        "couseName": "3D Game Development and AR/VR Technologies"
+    }
+]
